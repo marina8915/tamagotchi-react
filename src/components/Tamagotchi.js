@@ -143,7 +143,7 @@ export default class Tamagotchi extends Component {
     }
     eventSleep(event) {
         event.preventDefault()
-            document.getElementById('say').innerHTML = 'Zzz...'
+        document.getElementById('say').innerHTML = 'Zzz...'
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -162,7 +162,7 @@ export default class Tamagotchi extends Component {
         document.getElementById('sleep').style.display = 'none'
         document.getElementById('play').disabled = 'true'
         document.getElementById('awake').style.display = 'inline-block'
-        document.getElementById('want').innerHTML = ''
+        document.getElementById('want').style.display = 'none'
     }
 
     eventAwake(event) {
@@ -185,6 +185,7 @@ export default class Tamagotchi extends Component {
         document.getElementById('sleep').style.display = 'inline-block'
         document.getElementById('play').removeAttribute('disabled')
         document.getElementById('awake').style.display = 'none'
+        document.getElementById('want').style.display = 'block'
     }
 
     eventPlay(event) {
