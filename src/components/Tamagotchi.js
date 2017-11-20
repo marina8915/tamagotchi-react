@@ -226,7 +226,7 @@ export default class Tamagotchi extends Component {
                 </li>
                 <li>
                     <p>Health: {this.state.health}</p>
-                    <p className="line" style={{width: this.state.appetite + 'px'}}>
+                    <p className="line" style={{width: this.state.health + 'px'}}>
                         {this.state.health}
                     </p>
                 </li>
