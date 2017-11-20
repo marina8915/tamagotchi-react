@@ -48,17 +48,14 @@ body {
   font-family: sans-serif;
 }
 
-#want{
-  white-space: pre-line;
+form{
+  margin-bottom: 20px;
 }
+
 button:disabled {
   border: #dddddd 1px solid;
   background: #ffffff;
   color: #dddddd;;
-}
-
-form{
- margin-bottom: 20px;
 }
 
 ul{
@@ -78,4 +75,20 @@ ul li p.line {
   color: #ffffff;
   font-size: 16px;
   text-align: center;
+}
+
+#speak{
+  background: url("../images/say.png") no-repeat;
+  background-size: 250px 250px;
+  height: 250px;
+  width: 250px;
+  margin-left: 50%;
+}
+
+#say{
+  padding-top: 70px;
+}
+
+#want{
+  white-space: pre-line;
 }

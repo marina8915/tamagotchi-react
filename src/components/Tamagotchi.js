@@ -25,6 +25,7 @@ export default class Tamagotchi extends Component {
         this.eventSleep = this.eventSleep.bind(this)
         this.eventAwake = this.eventAwake.bind(this)
         this.eventPlay = this.eventPlay.bind(this)
+        this.src = require('../images/born.gif')
     }
 
     createDragon(event) {
@@ -48,8 +49,9 @@ export default class Tamagotchi extends Component {
         document.getElementById('drink').style.display = 'inline-block'
         document.getElementById('sleep').style.display = 'inline-block'
         document.getElementById('play').style.display = 'inline-block'
-        document.getElementById('say').innerHTML = 'Hello, my name is '
+        document.getElementById('say').innerHTML = 'Helo, my name is '
             + document.getElementById('name').value
+        this.src = require('../images/1.gif')
     }
 
     life() {
@@ -118,6 +120,7 @@ export default class Tamagotchi extends Component {
                 thirst: this.state.thirst - 10,
                 ignoreEat: 0
             })
+            this.src = require('../images/eat.gif')
         }
     }
 
@@ -140,6 +143,7 @@ export default class Tamagotchi extends Component {
                 thirst: this.state.thirst + 20,
                 ignoreDrink: 0
             })
+            this.src = require('../images/drink.gif')
         }
     }
     eventSleep(event) {
@@ -164,6 +168,7 @@ export default class Tamagotchi extends Component {
         document.getElementById('play').disabled = 'true'
         document.getElementById('awake').style.display = 'inline-block'
         document.getElementById('want').style.display = 'none'
+        this.src = require('../images/sleep.gif')
     }
 
     eventAwake(event) {
@@ -187,11 +192,12 @@ export default class Tamagotchi extends Component {
         document.getElementById('play').removeAttribute('disabled')
         document.getElementById('awake').style.display = 'none'
         document.getElementById('want').style.display = 'block'
+        this.src = require('../images/1.gif')
     }
 
     eventPlay(event) {
         event.preventDefault()
-        document.getElementById('say').innerHTML = 'I like fly!'
+        document.getElementById('say').innerHTML = 'I like to play!'
         this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -205,6 +211,7 @@ export default class Tamagotchi extends Component {
                 thirst: this.state.thirst - 10,
                 ignorePlay: 0
         })
+        this.src = require('../images/play.gif')
     }
 
     renderHeader() {
@@ -213,25 +220,25 @@ export default class Tamagotchi extends Component {
 
                 <li>
                     <p>Appetite: {this.state.appetite}</p>
-                    <p class="line" style={{width: this.state.appetite + 'px'}}>
+                    <p className="line" style={{width: this.state.appetite + 'px'}}>
                         {this.state.appetite}
                     </p>
                 </li>
                 <li>
                     <p>Health: {this.state.health}</p>
-                    <p class="line" style={{width: this.state.appetite + 'px'}}>
+                    <p className="line" style={{width: this.state.appetite + 'px'}}>
                         {this.state.health}
                     </p>
                 </li>
                 <li>
                     <p>Humor: {this.state.humor}</p>
-                    <p class="line" style={{width: this.state.humor + 'px'}}>
+                    <p className="line" style={{width: this.state.humor + 'px'}}>
                         {this.state.humor}
                     </p>
                 </li>
                 <li>
                     <p>Thirst: {this.state.thirst}</p>
-                    <p class="line" style={{width: this.state.thirst + 'px'}}>
+                    <p className="line" style={{width: this.state.thirst + 'px'}}>
                         {this.state.thirst}
                     </p>
                 </li>
@@ -286,8 +293,11 @@ export default class Tamagotchi extends Component {
                     </button>
                 </form>
                 {this.renderHeader()}
-                <div id="say"></div>
-                <div id="want">{this.life()}</div>
+                <div id="speak">
+                    <div id="say"></div>
+                    <div id="want">{this.life()}</div>
+                </div>
+                <div  id ="gif"><img src={this.src} alt="dragon"/></div>
             </div>
         )
     }
