@@ -41,6 +41,7 @@ export default class Tamagotchi extends Component {
             humor: 100,
             thirst: 90
         })
+        event.preventDefault()
         document.getElementById('name').style.display = 'none'
         document.getElementById('create').style.display = 'none'
         document.getElementById('eat').style.display = 'inline-block'
@@ -209,10 +210,31 @@ export default class Tamagotchi extends Component {
     renderHeader() {
         return (
             <ul>
-                <li>Appetite: {this.state.appetite};</li>
-                <li>Health: {this.state.health};</li>
-                <li>Humor: {this.state.humor};</li>
-                <li>Thirst: {this.state.thirst};</li>
+
+                <li>
+                    <p>Appetite: {this.state.appetite}</p>
+                    <p class="line" style={{width: this.state.appetite + 'px'}}>
+                        {this.state.appetite}
+                    </p>
+                </li>
+                <li>
+                    <p>Health: {this.state.health}</p>
+                    <p class="line" style={{width: this.state.appetite + 'px'}}>
+                        {this.state.health}
+                    </p>
+                </li>
+                <li>
+                    <p>Humor: {this.state.humor}</p>
+                    <p class="line" style={{width: this.state.humor + 'px'}}>
+                        {this.state.humor}
+                    </p>
+                </li>
+                <li>
+                    <p>Thirst: {this.state.thirst}</p>
+                    <p class="line" style={{width: this.state.thirst + 'px'}}>
+                        {this.state.thirst}
+                    </p>
+                </li>
             </ul>
         )
     }
@@ -228,7 +250,7 @@ export default class Tamagotchi extends Component {
                         placeholder="Name"
                     />
                     <button
-                        type="button"
+                        type="submit"
                         id="create"
                         onClick={this.createDragon}>Create
                     </button>

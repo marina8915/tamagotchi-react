@@ -7,7 +7,7 @@ div, p, a, span, em, strong, img, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd
 }
 
 select, input, textarea {
-  font-size: 14px;
+  font-size: 18px;
   color: #000;
   vertical-align: middle;
 }
@@ -49,5 +49,33 @@ body {
 }
 
 #want{
-  white-space: pre-line
+  white-space: pre-line;
+}
+button:disabled {
+  border: #dddddd 1px solid;
+  background: #ffffff;
+  color: #dddddd;;
+}
+
+form{
+ margin-bottom: 20px;
+}
+
+ul{
+  text-align: justify;
+  margin-left: 20%;
+}
+
+ul li p{
+  display: inline-block;
+  margin-right: 20px;
+  width: 100px;
+}
+
+ul li p.line {
+  background: linear-gradient(to left, red, gold);
+  height: 20px;
+  color: #ffffff;
+  font-size: 16px;
+  text-align: center;
 }
