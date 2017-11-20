@@ -60,7 +60,9 @@ button:disabled {
 
 ul{
   text-align: justify;
-  margin-left: 20%;
+  width: auto;
+  display: inline-block;
+  margin-left: 15%;
 }
 
 ul li p{
@@ -79,14 +81,15 @@ ul li p.line {
 
 #speak{
   background: url("../images/say.png") no-repeat;
-  background-size: 250px 250px;
-  height: 250px;
-  width: 250px;
-  margin-left: 50%;
+  background-size: 270px 270px;
+  height: 270px;
+  width: 270px;
+  display: inline-block;
 }
 
 #say{
   padding-top: 70px;
+  padding-left: 10px;
 }
 
 #want{
