@@ -81,14 +81,14 @@ ul li p.line {
 
 #speak{
   background: url("../images/say.png") no-repeat;
-  background-size: 270px 270px;
-  height: 270px;
+  background-size: 270px 200px;
+  height: 200px;
   width: 270px;
   display: inline-block;
 }
 
 #say{
-  padding-top: 70px;
+  padding-top: 50px;
   padding-left: 10px;
 }
 

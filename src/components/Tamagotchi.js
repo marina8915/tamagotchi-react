@@ -29,81 +29,132 @@ export default class Tamagotchi extends Component {
     }
 
     createDragon(event) {
-        event.preventDefault()
-        this.setState({
-            parameters: this.state.parameters.concat([{
-                appetite: this.state.appetite,
-                health: this.state.health,
-                humor: this.state.humor,
-                thirst: this.state.thirst
-            }]),
-            appetite: 80,
-            health: 100,
-            humor: 100,
-            thirst: 90
-        })
-        event.preventDefault()
-        document.getElementById('name').style.display = 'none'
-        document.getElementById('create').style.display = 'none'
-        document.getElementById('eat').style.display = 'inline-block'
-        document.getElementById('drink').style.display = 'inline-block'
-        document.getElementById('sleep').style.display = 'inline-block'
-        document.getElementById('play').style.display = 'inline-block'
-        document.getElementById('say').innerHTML = 'Helo, my name is '
-            + document.getElementById('name').value
-        this.src = require('../images/1.gif')
+        var value = document.getElementById('name').value
+        var empty = -value
+        if ((document.getElementById('name').value) && (empty !== -0)) {
+            this.setState({
+                parameters: this.state.parameters.concat([{
+                    appetite: this.state.appetite,
+                    health: this.state.health,
+                    humor: this.state.humor,
+                    thirst: this.state.thirst,
+                    die: this.state.die
+                }]),
+                appetite: 80,
+                health: 100,
+                humor: 100,
+                thirst: 90
+            })
+            event.preventDefault()
+            document.getElementById('name').style.display = 'none'
+            document.getElementById('create').style.display = 'none'
+            document.getElementById('eat').style.display = 'inline-block'
+            document.getElementById('drink').style.display = 'inline-block'
+            document.getElementById('sleep').style.display = 'inline-block'
+            document.getElementById('play').style.display = 'inline-block'
+            document.getElementById('say').innerHTML = 'Hello, my name is '
+                + document.getElementById('name').value
+            this.src = require('../images/1.gif')
+        }
+    }
+
+    getRandomInt() {
+        return Math.floor(Math.random() * (20 - 10 + 1)) + 10;
     }
 
     life() {
         var text = ''
-        if (this.state.humor <= 0 || this.state.appetite <= 0 || this.state.thirst <= 0) {
-            this.state.health -= 50
-            this.state.humor -= 50
+        var globalIgnore = this.state.ignoreEat + this.state.ignoreDrink + this.state.ignorePlay + this.state.ignoreSleep
+        if (this.state.appetite === 0 &&
+            this.state.health === 0 &&
+            this.state.humor === 0 &&
+            this.state.thirst === 0) {
+            text = 'Hello, create a new dragon!\n Please enter a name.'
+        } else {
+            if (this.state.humor <= 0 || this.state.appetite <= 0 || this.state.thirst <= 0) {
+                this.state.health -= 50
+                this.state.humor -= 50
+            }
+            if (this.state.humor < 100 ||
+                this.state.health < 100) {
+                text = 'I want to sleep\n'
+                this.state.ignoreSleep++
+            }
+            if (this.state.ignoreSleep > 5) {
+                this.state.health -= this.getRandomInt()
+                this.state.humor -= this.getRandomInt()
+            }
+            if (this.state.appetite < 100) {
+                text += 'Please, give me the feed\n'
+                this.state.ignoreEat++
+            }
+            if (this.state.ignoreEat > 5) {
+                this.state.health -= this.getRandomInt()
+                this.state.humor -= this.getRandomInt()
+                this.state.appetite -= this.getRandomInt()
+            }
+            if (this.state.thirst < 100) {
+                text += 'Please, give me the water\n'
+                this.state.ignoreDrink++
+            }
+            if (this.state.ignoreDrink > 5) {
+                this.state.health -= this.getRandomInt()
+                this.state.humor -= this.getRandomInt()
+                this.state.thirst -= this.getRandomInt()
+            }
+            if (this.state.humor < 100) {
+                text += 'I want to play'
+                this.state.ignorePlay++
+            }
+            if (this.state.ignorePlay > 5) {
+                this.state.health -= this.getRandomInt()
+                this.state.humor -= this.getRandomInt()
+            }
+
+            if (this.state.appetite <= 0) {
+                this.state.ignoreEat++
+                this.state.health -= this.getRandomInt()
+                this.state.appetite = 0
+                text = 'I really want to eat!\n'
+            }
+            if (this.state.humor <= 0) {
+                this.state.humor = 0
+                text = 'I want to play!'
+                this.state.health -= this.getRandomInt()
+                this.state.ignorePlay++
+            }
+            if (this.state.humor >= 100) {
+                this.state.humor = 100
+            }
+            if (this.state.thirst <= 0) {
+                this.state.thirst = 0
+                text = 'I really want to drink!'
+                this.state.ignoreDrink++
+                this.state.health -= this.getRandomInt()
+            }
+            if (this.state.health <= 0) {
+                this.state.health = 0
+                this.state.ignoreSleep++
+            }
+            if (this.state.health >= 100) {
+                this.state.health = 100
+            }
+            if (this.state.appetite >= 100) {
+                this.state.appetite = 100
+            }
+            if (this.state.thirst >= 100) {
+                this.state.thirst = 100
+            }
         }
-        if (this.state.humor < 100 ||
-            this.state.health < 100) {
-            text = 'I want to sleep\n'
-            this.state.ignoreSleep++
-        }
-        if (this.state.ignoreSleep > 3) {
-            this.state.health -= 20
-            this.state.humor -= 20
-        }
-        if (this.state.appetite < 100) {
-            text += 'Please, give me the feed\n'
-            this.state.ignoreEat++
-        }
-        if (this.state.ignoreEat > 3) {
-            this.state.health -= 20
-            this.state.humor -= 20
-            this.state.appetite -= 10
-        }
-        if (this.state.thirst < 100) {
-            text += 'Please, give me the water\n'
-            this.state.ignoreDrink++
-        }
-        if (this.state.ignoreDrink > 5) {
-            this.state.health -= 20
-            this.state.humor -= 20
-            this.state.thirst -= 10
-        }
-        if (this.state.humor < 100) {
-            text += 'I want to play'
-            this.state.ignorePlay++
-        }
-        if (this.state.ignorePlay > 5) {
-            this.state.health -= 10
-            this.state.humor -= 20
-        }
-        if(this.state.humor <= 0 && this.state.health <= 0){
-            text = 'Create new pet!'
+        //die
+        if (this.state.humor <= 0 && this.state.health <= 0 && globalIgnore > 0) {
+            window.location.reload()
         }
         return text
     }
 
-    eventEat(event) {
-        event.preventDefault()
-        if (this.state.appetite >= 150) {
+    eventEat() {
+        if (this.state.appetite >= 100) {
             document.getElementById('say').innerHTML = 'Thank you, I don`t want to eat'
         } else {
             document.getElementById('say').innerHTML = 'Yummy'
@@ -114,19 +165,19 @@ export default class Tamagotchi extends Component {
                     humor: this.state.humor,
                     thirst: this.state.thirst
                 }]),
-                appetite: this.state.appetite + 20,
-                health: this.state.health + 10,
-                humor: this.state.humor + 10,
-                thirst: this.state.thirst - 10,
                 ignoreEat: 0
             })
+            this.state.appetite += this.getRandomInt()
+            this.state.health += this.getRandomInt()
+            this.state.humor += this.getRandomInt()
+            this.state.thirst -= this.getRandomInt()
             this.src = require('../images/eat.gif')
         }
+        this.life()
     }
 
-    eventDrink(event) {
-        event.preventDefault()
-        if (this.state.thirst >= 150) {
+    eventDrink() {
+        if (this.state.thirst >= 100) {
             document.getElementById('say').innerHTML = 'Thank you, I don`t want to drink'
         } else {
             document.getElementById('say').innerHTML = 'Thank you'
@@ -137,31 +188,32 @@ export default class Tamagotchi extends Component {
                     humor: this.state.humor,
                     thirst: this.state.thirst
                 }]),
-                appetite: this.state.appetite + 10,
-                health: this.state.health + 10,
-                humor: this.state.humor + 10,
-                thirst: this.state.thirst + 20,
                 ignoreDrink: 0
             })
+            this.state.appetite += this.getRandomInt()
+            this.state.health += this.getRandomInt()
+            this.state.humor += this.getRandomInt()
+            this.state.thirst += this.getRandomInt()
             this.src = require('../images/drink.gif')
         }
+        this.life()
     }
-    eventSleep(event) {
-        event.preventDefault()
+
+    eventSleep() {
         document.getElementById('say').innerHTML = 'Zzz...'
-            this.setState({
-                parameters: this.state.parameters.concat([{
-                    appetite: this.state.appetite,
-                    health: this.state.health,
-                    humor: this.state.humor,
-                    thirst: this.state.thirst
-                }]),
-                appetite: this.state.appetite - 20,
-                health: this.state.health + 10,
-                humor: this.state.humor + 10,
-                thirst: this.state.thirst - 10,
-                ignoreSleep: 0
-            })
+        this.setState({
+            parameters: this.state.parameters.concat([{
+                appetite: this.state.appetite,
+                health: this.state.health,
+                humor: this.state.humor,
+                thirst: this.state.thirst
+            }]),
+            ignoreSleep: 0
+        })
+        this.state.appetite -= this.getRandomInt()
+        this.state.health += this.getRandomInt()
+        this.state.humor += this.getRandomInt()
+        this.state.thirst +=this.getRandomInt()
         document.getElementById('eat').disabled = 'true'
         document.getElementById('drink').disabled = 'true'
         document.getElementById('sleep').style.display = 'none'
@@ -169,10 +221,10 @@ export default class Tamagotchi extends Component {
         document.getElementById('awake').style.display = 'inline-block'
         document.getElementById('want').style.display = 'none'
         this.src = require('../images/sleep.gif')
+        this.life()
     }
 
-    eventAwake(event) {
-        event.preventDefault()
+    eventAwake() {
         document.getElementById('say').innerHTML = 'Good morning!'
         this.setState({
             parameters: this.state.parameters.concat([{
@@ -181,10 +233,6 @@ export default class Tamagotchi extends Component {
                 humor: this.state.humor,
                 thirst: this.state.thirst
             }]),
-            appetite: this.state.appetite - 20,
-            health: this.state.health + 10,
-            humor: this.state.humor + 10,
-            thirst: this.state.thirst - 10,
         })
         document.getElementById('eat').removeAttribute('disabled')
         document.getElementById('drink').removeAttribute('disabled')
@@ -193,25 +241,26 @@ export default class Tamagotchi extends Component {
         document.getElementById('awake').style.display = 'none'
         document.getElementById('want').style.display = 'block'
         this.src = require('../images/1.gif')
+        this.life()
     }
 
-    eventPlay(event) {
-        event.preventDefault()
+    eventPlay() {
         document.getElementById('say').innerHTML = 'I like to play!'
         this.setState({
-                parameters: this.state.parameters.concat([{
-                    appetite: this.state.appetite,
-                    health: this.state.health,
-                    humor: this.state.humor,
-                    thirst: this.state.thirst
-                }]),
-                appetite: this.state.appetite - 20,
-                health: this.state.health + 10,
-                humor: this.state.humor + 10,
-                thirst: this.state.thirst - 10,
-                ignorePlay: 0
+            parameters: this.state.parameters.concat([{
+                appetite: this.state.appetite,
+                health: this.state.health,
+                humor: this.state.humor,
+                thirst: this.state.thirst
+            }]),
+            ignorePlay: 0
         })
+        this.state.appetite -= this.getRandomInt()
+        this.state.health -= this.getRandomInt()
+        this.state.humor += this.getRandomInt()
+        this.state.thirst += this.getRandomInt()
         this.src = require('../images/play.gif')
+        this.life()
     }
 
     renderHeader() {
@@ -297,7 +346,7 @@ export default class Tamagotchi extends Component {
                     <div id="say"></div>
                     <div id="want">{this.life()}</div>
                 </div>
-                <div  id ="gif"><img src={this.src} alt="dragon"/></div>
+                <div id="gif"><img src={this.src} alt="dragon"/></div>
             </div>
         )
     }
