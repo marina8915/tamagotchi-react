@@ -16,7 +16,8 @@ export default class Tamagotchi extends Component {
             ignorePlay: 0,
             ignoreSleep: 0,
             displayCreate: 'inline-block',
-            displayDragon: 'none'
+            displayDragon: 'none',
+            displayButtonAwake: 'none'
         }
 
         this.renderHeader = this.renderHeader.bind(this)
@@ -142,6 +143,9 @@ export default class Tamagotchi extends Component {
             if (this.state.thirst >= 100) {
                 this.state.thirst = 100
             }
+            if (this.state.displayButtonAwake != 'none'){
+                text = ''
+            }
         }
         //die
         if (this.state.humor <= 0 && this.state.health <= 0 && globalIgnore > 0) {
@@ -205,18 +209,14 @@ export default class Tamagotchi extends Component {
                 humor: this.state.humor,
                 thirst: this.state.thirst
             }]),
-            ignoreSleep: 0
+            ignoreSleep: 0,
+            displayDragon: 'none',
+            displayButtonAwake: 'inline-block'
         })
         this.state.appetite -= this.getRandomInt()
         this.state.health += this.getRandomInt()
         this.state.humor += this.getRandomInt()
         this.state.thirst +=this.getRandomInt()
-        document.getElementById('eat').disabled = 'true'
-        document.getElementById('drink').disabled = 'true'
-        document.getElementById('sleep').style.display = 'none'
-        document.getElementById('play').disabled = 'true'
-        document.getElementById('awake').style.display = 'inline-block'
-        document.getElementById('want').style.display = 'none'
         this.src = require('../images/sleep.gif')
         this.life()
     }
@@ -230,13 +230,9 @@ export default class Tamagotchi extends Component {
                 humor: this.state.humor,
                 thirst: this.state.thirst
             }]),
+            displayDragon: 'inline-block',
+            displayButtonAwake: 'none'
         })
-        document.getElementById('eat').removeAttribute('disabled')
-        document.getElementById('drink').removeAttribute('disabled')
-        document.getElementById('sleep').style.display = 'inline-block'
-        document.getElementById('play').removeAttribute('disabled')
-        document.getElementById('awake').style.display = 'none'
-        document.getElementById('want').style.display = 'block'
         this.src = require('../images/1.gif')
         this.life()
     }
@@ -337,7 +333,7 @@ export default class Tamagotchi extends Component {
                         type="button"
                         id="awake"
                         onClick={this.eventAwake}
-                        style={{display: "none"}}>Awake
+                        style={{display: this.state.displayButtonAwake}}>Awake
                     </button>
                 </form>
                 {this.renderHeader()}
