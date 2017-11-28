@@ -36,6 +36,7 @@ export default class Tamagotchi extends Component {
     getName(event) {
         this.setState({value: event.target.value});
     }
+
     createDragon(event) {
         var value = this.state.value
         var empty = -value
