@@ -17,7 +17,8 @@ export default class Tamagotchi extends Component {
             ignoreSleep: 0,
             displayCreate: 'inline-block',
             displayDragon: 'none',
-            displayButtonAwake: 'none'
+            displayButtonAwake: 'none',
+            value: ''
         }
 
         this.renderHeader = this.renderHeader.bind(this)
@@ -28,11 +29,15 @@ export default class Tamagotchi extends Component {
         this.eventSleep = this.eventSleep.bind(this)
         this.eventAwake = this.eventAwake.bind(this)
         this.eventPlay = this.eventPlay.bind(this)
+        this.getName = this.getName.bind(this)
         this.src = require('../images/born.gif')
     }
 
+    getName(event) {
+        this.setState({value: event.target.value});
+    }
     createDragon(event) {
-        var value = document.getElementById('name').value
+        var value = this.state.value
         var empty = -value
         if ((value) && (empty !== -0)) {
             this.setState({
@@ -271,7 +276,6 @@ export default class Tamagotchi extends Component {
     renderHeader() {
         return (
             <ul>
-
                 <li>
                     <p>Appetite: {this.state.appetite}</p>
                     <p className="line" style={{width: this.state.appetite + 'px'}}>
@@ -309,7 +313,9 @@ export default class Tamagotchi extends Component {
                         type="text"
                         id="name"
                         placeholder="Name"
+                        value={this.state.value}
                         style={{display: this.state.displayCreate}}
+                        onChange={this.getName}
                     />
                     <button
                         type="submit"
