@@ -14,7 +14,9 @@ export default class Tamagotchi extends Component {
             ignoreEat: 0,
             ignoreDrink: 0,
             ignorePlay: 0,
-            ignoreSleep: 0
+            ignoreSleep: 0,
+            displayCreate: 'inline-block',
+            displayDragon: 'none'
         }
 
         this.renderHeader = this.renderHeader.bind(this)
@@ -43,15 +45,11 @@ export default class Tamagotchi extends Component {
                 appetite: 80,
                 health: 100,
                 humor: 100,
-                thirst: 90
+                thirst: 90,
+                displayCreate: 'none',
+                displayDragon: 'inline-block'
             })
             event.preventDefault()
-            document.getElementById('name').style.display = 'none'
-            document.getElementById('create').style.display = 'none'
-            document.getElementById('eat').style.display = 'inline-block'
-            document.getElementById('drink').style.display = 'inline-block'
-            document.getElementById('sleep').style.display = 'inline-block'
-            document.getElementById('play').style.display = 'inline-block'
             this.say = 'Hello, my name is '
                 + document.getElementById('name').value
             this.src = require('../images/1.gif')
@@ -303,35 +301,37 @@ export default class Tamagotchi extends Component {
                         type="text"
                         id="name"
                         placeholder="Name"
+                        style={{display: this.state.displayCreate}}
                     />
                     <button
                         type="submit"
                         id="create"
-                        onClick={this.createDragon}>Create
+                        onClick={this.createDragon}
+                        style={{display: this.state.displayCreate}}>Create
                     </button>
                     <button
                         type="button"
                         id="eat"
                         onClick={this.eventEat}
-                        style={{display: "none"}}>Eat
+                        style={{display: this.state.displayDragon}}>Eat
                     </button>
                     <button
                         type="button"
                         id="drink"
                         onClick={this.eventDrink}
-                        style={{display: "none"}}>Drink
+                        style={{display:this.state.displayDragon}}>Drink
                     </button>
                     <button
                         type="button"
                         id="play"
                         onClick={this.eventPlay}
-                        style={{display: "none"}}>Play
+                        style={{display: this.state.displayDragon}}>Play
                     </button>
                     <button
                         type="button"
                         id="sleep"
                         onClick={this.eventSleep}
-                        style={{display: "none"}}>Sleep
+                        style={{display: this.state.displayDragon}}>Sleep
                     </button>
                     <button
                         type="button"
