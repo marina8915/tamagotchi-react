@@ -52,7 +52,7 @@ export default class Tamagotchi extends Component {
             document.getElementById('drink').style.display = 'inline-block'
             document.getElementById('sleep').style.display = 'inline-block'
             document.getElementById('play').style.display = 'inline-block'
-            document.getElementById('say').innerHTML = 'Hello, my name is '
+            this.say = 'Hello, my name is '
                 + document.getElementById('name').value
             this.src = require('../images/1.gif')
         }
@@ -110,7 +110,6 @@ export default class Tamagotchi extends Component {
                 this.state.health -= this.getRandomInt()
                 this.state.humor -= this.getRandomInt()
             }
-
             if (this.state.appetite <= 0) {
                 this.state.ignoreEat++
                 this.state.health -= this.getRandomInt()
@@ -155,9 +154,9 @@ export default class Tamagotchi extends Component {
 
     eventEat() {
         if (this.state.appetite >= 100) {
-            document.getElementById('say').innerHTML = 'Thank you, I don`t want to eat'
+            this.say = 'Thank you, I don`t want to eat'
         } else {
-            document.getElementById('say').innerHTML = 'Yummy'
+            this.say = 'Yummy'
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -178,9 +177,9 @@ export default class Tamagotchi extends Component {
 
     eventDrink() {
         if (this.state.thirst >= 100) {
-            document.getElementById('say').innerHTML = 'Thank you, I don`t want to drink'
+            this.say = 'Thank you, I don`t want to drink'
         } else {
-            document.getElementById('say').innerHTML = 'Thank you'
+            this.say = 'Thank you'
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -200,7 +199,7 @@ export default class Tamagotchi extends Component {
     }
 
     eventSleep() {
-        document.getElementById('say').innerHTML = 'Zzz...'
+        this.say = 'Zzz...'
         this.setState({
             parameters: this.state.parameters.concat([{
                 appetite: this.state.appetite,
@@ -225,7 +224,7 @@ export default class Tamagotchi extends Component {
     }
 
     eventAwake() {
-        document.getElementById('say').innerHTML = 'Good morning!'
+        this.say = 'Good morning!'
         this.setState({
             parameters: this.state.parameters.concat([{
                 appetite: this.state.appetite,
@@ -245,7 +244,7 @@ export default class Tamagotchi extends Component {
     }
 
     eventPlay() {
-        document.getElementById('say').innerHTML = 'I like to play!'
+        this.say = 'I like to play!'
         this.setState({
             parameters: this.state.parameters.concat([{
                 appetite: this.state.appetite,
@@ -343,7 +342,7 @@ export default class Tamagotchi extends Component {
                 </form>
                 {this.renderHeader()}
                 <div id="speak">
-                    <div id="say"></div>
+                    <div id="say">{this.say}</div>
                     <div id="want">{this.life()}</div>
                 </div>
                 <div id="gif"><img src={this.src} alt="dragon"/></div>
