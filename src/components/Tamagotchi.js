@@ -34,7 +34,7 @@ export default class Tamagotchi extends Component {
     createDragon(event) {
         var value = document.getElementById('name').value
         var empty = -value
-        if ((document.getElementById('name').value) && (empty !== -0)) {
+        if ((value) && (empty !== -0)) {
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -52,7 +52,7 @@ export default class Tamagotchi extends Component {
             })
             event.preventDefault()
             this.say = 'Hello, my name is '
-                + document.getElementById('name').value
+                + value
             this.src = require('../images/1.gif')
         }
     }
@@ -111,14 +111,11 @@ export default class Tamagotchi extends Component {
             }
             if (this.state.appetite <= 0) {
                 this.state.ignoreEat++
-                this.state.health -= this.getRandomInt()
                 this.state.appetite = 0
                 text = 'I really want to eat!\n'
             }
             if (this.state.humor <= 0) {
                 this.state.humor = 0
-                text = 'I want to play!'
-                this.state.health -= this.getRandomInt()
                 this.state.ignorePlay++
             }
             if (this.state.humor >= 100) {
@@ -128,7 +125,6 @@ export default class Tamagotchi extends Component {
                 this.state.thirst = 0
                 text = 'I really want to drink!'
                 this.state.ignoreDrink++
-                this.state.health -= this.getRandomInt()
             }
             if (this.state.health <= 0) {
                 this.state.health = 0
@@ -143,7 +139,7 @@ export default class Tamagotchi extends Component {
             if (this.state.thirst >= 100) {
                 this.state.thirst = 100
             }
-            if (this.state.displayButtonAwake != 'none'){
+            if (this.state.displayButtonAwake !== 'none') {
                 text = ''
             }
         }
@@ -157,6 +153,14 @@ export default class Tamagotchi extends Component {
     eventEat() {
         if (this.state.appetite >= 100) {
             this.say = 'Thank you, I don`t want to eat'
+            this.setState({
+                parameters: this.state.parameters.concat([{
+                    appetite: this.state.appetite,
+                    health: this.state.health,
+                    humor: this.state.humor,
+                    thirst: this.state.thirst
+                }]),
+            })
         } else {
             this.say = 'Yummy'
             this.setState({
@@ -180,6 +184,14 @@ export default class Tamagotchi extends Component {
     eventDrink() {
         if (this.state.thirst >= 100) {
             this.say = 'Thank you, I don`t want to drink'
+            this.setState({
+                parameters: this.state.parameters.concat([{
+                    appetite: this.state.appetite,
+                    health: this.state.health,
+                    humor: this.state.humor,
+                    thirst: this.state.thirst
+                }]),
+            })
         } else {
             this.say = 'Thank you'
             this.setState({
@@ -216,7 +228,7 @@ export default class Tamagotchi extends Component {
         this.state.appetite -= this.getRandomInt()
         this.state.health += this.getRandomInt()
         this.state.humor += this.getRandomInt()
-        this.state.thirst +=this.getRandomInt()
+        this.state.thirst += this.getRandomInt()
         this.src = require('../images/sleep.gif')
         this.life()
     }
@@ -315,7 +327,7 @@ export default class Tamagotchi extends Component {
                         type="button"
                         id="drink"
                         onClick={this.eventDrink}
-                        style={{display:this.state.displayDragon}}>Drink
+                        style={{display: this.state.displayDragon}}>Drink
                     </button>
                     <button
                         type="button"
