@@ -15,9 +15,9 @@ export default class Tamagotchi extends Component {
             ignoreDrink: 0,
             ignorePlay: 0,
             ignoreSleep: 0,
-            displayCreate: 'inline-block',
-            displayDragon: 'none',
-            displayButtonAwake: 'none',
+            isDisplayCreate: true,
+            isDisplayDragon: false,
+            isDisplayButtonAwake: false,
             value: ''
         }
 
@@ -31,6 +31,7 @@ export default class Tamagotchi extends Component {
         this.eventPlay = this.eventPlay.bind(this)
         this.getName = this.getName.bind(this)
         this.src = require('../images/born.gif')
+        this.life()
     }
 
     getName(event) {
@@ -38,9 +39,9 @@ export default class Tamagotchi extends Component {
     }
 
     createDragon(event) {
-        var value = this.state.value
-        var empty = -value
-        if ((value) && (empty !== -0)) {
+        event.preventDefault()
+        var name = this.state.value
+        if (name) {
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -53,72 +54,78 @@ export default class Tamagotchi extends Component {
                 health: 100,
                 humor: 100,
                 thirst: 90,
-                displayCreate: 'none',
-                displayDragon: 'inline-block'
+                isDisplayCreate: false,
+                isDisplayDragon: true
             })
-            event.preventDefault()
             this.say = 'Hello, my name is '
-                + value
+                + name
             this.src = require('../images/1.gif')
         }
-    }
-
-    getRandomInt() {
-        return Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+        this.life()
     }
 
     life() {
-        var text = ''
-        var globalIgnore = this.state.ignoreEat + this.state.ignoreDrink + this.state.ignorePlay + this.state.ignoreSleep
-        if (this.state.appetite === 0 &&
-            this.state.health === 0 &&
-            this.state.humor === 0 &&
-            this.state.thirst === 0) {
-            text = 'Hello, create a new dragon!\n Please enter a name.'
-        } else {
+        this.text = ''
+        var sumIgnore = this.state.ignoreEat + this.state.ignoreDrink + this.state.ignorePlay + this.state.ignoreSleep
+        if (this.state.value) {
+            this.setState({
+                parameters: this.state.parameters.concat([{
+                    appetite: this.state.appetite,
+                    health: this.state.health,
+                    humor: this.state.humor,
+                    thirst: this.state.thirst,
+                    ignoreEat: this.state.ignoreEat,
+                    ignoreDrink: this.state.ignoreDrink,
+                    ignorePlay: this.state.ignorePlay,
+                    ignoreSleep: this.state.ignoreSleep,
+                    isDisplayCreate: this.state.isDisplayCreate,
+                    isDisplayDragon: this.state.isDisplayDragon,
+                    isDisplayButtonAwake: this.state.isDisplayButtonAwake
+                }]),
+            })
             if (this.state.humor <= 0 || this.state.appetite <= 0 || this.state.thirst <= 0) {
                 this.state.health -= 50
                 this.state.humor -= 50
             }
             if (this.state.humor < 100 ||
                 this.state.health < 100) {
-                text = 'I want to sleep\n'
+                this.text = 'I want to sleep\n'
                 this.state.ignoreSleep++
             }
             if (this.state.ignoreSleep > 5) {
-                this.state.health -= this.getRandomInt()
-                this.state.humor -= this.getRandomInt()
+                this.state.health -= getRandomInt()
+                this.state.humor -= getRandomInt()
             }
             if (this.state.appetite < 100) {
-                text += 'Please, give me the feed\n'
+                this.text += 'Please, give me the feed\n'
                 this.state.ignoreEat++
             }
             if (this.state.ignoreEat > 5) {
-                this.state.health -= this.getRandomInt()
-                this.state.humor -= this.getRandomInt()
-                this.state.appetite -= this.getRandomInt()
+                this.state.health -= getRandomInt()
+                this.state.humor -= getRandomInt()
+                this.state.appetite -= getRandomInt()
             }
             if (this.state.thirst < 100) {
-                text += 'Please, give me the water\n'
+                this.text += 'Please, give me the water\n'
                 this.state.ignoreDrink++
             }
             if (this.state.ignoreDrink > 5) {
-                this.state.health -= this.getRandomInt()
-                this.state.humor -= this.getRandomInt()
-                this.state.thirst -= this.getRandomInt()
+                this.state.health -= getRandomInt()
+                this.state.humor -= getRandomInt()
+                this.state.thirst -= getRandomInt()
             }
             if (this.state.humor < 100) {
-                text += 'I want to play'
+                this.text += 'I want to play'
                 this.state.ignorePlay++
             }
             if (this.state.ignorePlay > 5) {
-                this.state.health -= this.getRandomInt()
-                this.state.humor -= this.getRandomInt()
+                this.state.health -= getRandomInt()
+                this.state.humor -= getRandomInt()
             }
             if (this.state.appetite <= 0) {
                 this.state.ignoreEat++
                 this.state.appetite = 0
-                text = 'I really want to eat!\n'
+                this.text = 'I really want to eat!\n'
             }
             if (this.state.humor <= 0) {
                 this.state.humor = 0
@@ -129,7 +136,7 @@ export default class Tamagotchi extends Component {
             }
             if (this.state.thirst <= 0) {
                 this.state.thirst = 0
-                text = 'I really want to drink!'
+                this.text = 'I really want to drink!'
                 this.state.ignoreDrink++
             }
             if (this.state.health <= 0) {
@@ -145,20 +152,23 @@ export default class Tamagotchi extends Component {
             if (this.state.thirst >= 100) {
                 this.state.thirst = 100
             }
-            if (this.state.displayButtonAwake !== 'none') {
-                text = ''
+            //die
+            if (this.state.humor <= 0 && this.state.health <= 0 && sumIgnore > 0) {
+                this.say = 'I am die'
+                this.text = ''
+                setTimeout(function () {
+                    window.location.reload()
+                }, 5000)
+
             }
+        } else {
+            this.text = 'Hello, create a new dragon!\n Please enter a name.'
         }
-        //die
-        if (this.state.humor <= 0 && this.state.health <= 0 && globalIgnore > 0) {
-            window.location.reload()
-        }
-        return text
     }
 
     eventEat() {
         if (this.state.appetite >= 100) {
-            this.say = 'Thank you, I don`t want to eat'
+            this.say = 'I don`t want to eat'
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -178,10 +188,10 @@ export default class Tamagotchi extends Component {
                 }]),
                 ignoreEat: 0
             })
-            this.state.appetite += this.getRandomInt()
-            this.state.health += this.getRandomInt()
-            this.state.humor += this.getRandomInt()
-            this.state.thirst -= this.getRandomInt()
+            this.state.appetite += getRandomInt()
+            this.state.health += getRandomInt()
+            this.state.humor += getRandomInt()
+            this.state.thirst -= getRandomInt()
             this.src = require('../images/eat.gif')
         }
         this.life()
@@ -189,7 +199,7 @@ export default class Tamagotchi extends Component {
 
     eventDrink() {
         if (this.state.thirst >= 100) {
-            this.say = 'Thank you, I don`t want to drink'
+            this.say = 'I don`t want to drink'
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -209,10 +219,10 @@ export default class Tamagotchi extends Component {
                 }]),
                 ignoreDrink: 0
             })
-            this.state.appetite += this.getRandomInt()
-            this.state.health += this.getRandomInt()
-            this.state.humor += this.getRandomInt()
-            this.state.thirst += this.getRandomInt()
+            this.state.appetite += getRandomInt()
+            this.state.health += getRandomInt()
+            this.state.humor += getRandomInt()
+            this.state.thirst += getRandomInt()
             this.src = require('../images/drink.gif')
         }
         this.life()
@@ -225,18 +235,15 @@ export default class Tamagotchi extends Component {
                 appetite: this.state.appetite,
                 health: this.state.health,
                 humor: this.state.humor,
-                thirst: this.state.thirst
+                thirst: this.state.thirst,
+                isDisplayButtonAwake: this.state.isDisplayButtonAwake
             }]),
             ignoreSleep: 0,
-            displayDragon: 'none',
-            displayButtonAwake: 'inline-block'
+            isDisplayDragon: false,
+            isDisplayButtonAwake: true
         })
-        this.state.appetite -= this.getRandomInt()
-        this.state.health += this.getRandomInt()
-        this.state.humor += this.getRandomInt()
-        this.state.thirst += this.getRandomInt()
         this.src = require('../images/sleep.gif')
-        this.life()
+        this.text = ''
     }
 
     eventAwake() {
@@ -246,31 +253,47 @@ export default class Tamagotchi extends Component {
                 appetite: this.state.appetite,
                 health: this.state.health,
                 humor: this.state.humor,
-                thirst: this.state.thirst
+                thirst: this.state.thirst,
+                isDisplayButtonAwake: this.state.isDisplayButtonAwake
             }]),
-            displayDragon: 'inline-block',
-            displayButtonAwake: 'none'
+            isDisplayDragon: true,
+            isDisplayButtonAwake: false
         })
+        this.state.appetite -= getRandomInt()
+        this.state.health += getRandomInt()
+        this.state.humor += getRandomInt()
         this.src = require('../images/1.gif')
         this.life()
     }
 
     eventPlay() {
-        this.say = 'I like to play!'
-        this.setState({
-            parameters: this.state.parameters.concat([{
-                appetite: this.state.appetite,
-                health: this.state.health,
-                humor: this.state.humor,
-                thirst: this.state.thirst
-            }]),
-            ignorePlay: 0
-        })
-        this.state.appetite -= this.getRandomInt()
-        this.state.health -= this.getRandomInt()
-        this.state.humor += this.getRandomInt()
-        this.state.thirst += this.getRandomInt()
-        this.src = require('../images/play.gif')
+        if (this.state.health <= 0 || this.state.appetite <= 0 || this.state.thirst <= 0) {
+            this.say = 'I don`t want play!'
+            this.setState({
+                parameters: this.state.parameters.concat([{
+                    appetite: this.state.appetite,
+                    health: this.state.health,
+                    humor: this.state.humor,
+                    thirst: this.state.thirst
+                }]),
+            })
+        } else {
+            this.say = 'I like to play!'
+            this.setState({
+                parameters: this.state.parameters.concat([{
+                    appetite: this.state.appetite,
+                    health: this.state.health,
+                    humor: this.state.humor,
+                    thirst: this.state.thirst
+                }]),
+                ignorePlay: 0
+            })
+            this.state.appetite -= getRandomInt()
+            this.state.health -= getRandomInt()
+            this.state.humor += getRandomInt()
+            this.src = require('../images/play.gif')
+
+        }
         this.life()
     }
 
@@ -306,62 +329,81 @@ export default class Tamagotchi extends Component {
     }
 
     render() {
+        //style display
+        if (this.state.isDisplayCreate) {
+            this.displayCreate = 'inline-block'
+        } else {
+            this.displayCreate = 'none'
+        }
+        if (this.state.isDisplayDragon) {
+            this.displayDragon = 'inline-block'
+        } else {
+            this.displayDragon = 'none'
+        }
+        if (this.state.isDisplayButtonAwake) {
+            this.displayButtonAwake = 'inline-block'
+        } else {
+            this.displayButtonAwake = 'none'
+        }
         return (
             <div>
                 <h2>Tamagotchi</h2>
                 <form>
                     <input
                         type="text"
-                        id="name"
                         placeholder="Name"
                         value={this.state.value}
-                        style={{display: this.state.displayCreate}}
+                        style={{display: this.displayCreate}}
                         onChange={this.getName}
                     />
                     <button
                         type="submit"
                         id="create"
                         onClick={this.createDragon}
-                        style={{display: this.state.displayCreate}}>Create
+                        style={{display: this.displayCreate}}>Create
                     </button>
                     <button
                         type="button"
                         id="eat"
                         onClick={this.eventEat}
-                        style={{display: this.state.displayDragon}}>Eat
+                        style={{display: this.displayDragon}}>Eat
                     </button>
                     <button
                         type="button"
                         id="drink"
                         onClick={this.eventDrink}
-                        style={{display: this.state.displayDragon}}>Drink
+                        style={{display: this.displayDragon}}>Drink
                     </button>
                     <button
                         type="button"
                         id="play"
                         onClick={this.eventPlay}
-                        style={{display: this.state.displayDragon}}>Play
+                        style={{display: this.displayDragon}}>Play
                     </button>
                     <button
                         type="button"
                         id="sleep"
                         onClick={this.eventSleep}
-                        style={{display: this.state.displayDragon}}>Sleep
+                        style={{display: this.displayDragon}}>Sleep
                     </button>
                     <button
                         type="button"
                         id="awake"
                         onClick={this.eventAwake}
-                        style={{display: this.state.displayButtonAwake}}>Awake
+                        style={{display: this.displayButtonAwake}}>Awake
                     </button>
                 </form>
                 {this.renderHeader()}
                 <div id="speak">
                     <div id="say">{this.say}</div>
-                    <div id="want">{this.life()}</div>
+                    <div id="want">{this.text}</div>
                 </div>
                 <div id="gif"><img src={this.src} alt="dragon"/></div>
             </div>
         )
     }
+}
+
+function getRandomInt() {
+    return Math.floor(Math.random() * (20 - 10 + 1)) + 10;
 }
