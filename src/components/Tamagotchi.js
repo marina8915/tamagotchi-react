@@ -41,7 +41,7 @@ export default class Tamagotchi extends Component {
     createDragon(event) {
         event.preventDefault()
         var name = this.state.value
-        if (name) {
+        if (/[1-9a-zа-я\-]+/gi.test(name)) {
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -50,13 +50,13 @@ export default class Tamagotchi extends Component {
                     thirst: this.state.thirst,
                     die: this.state.die
                 }]),
-                appetite: 80,
-                health: 100,
-                humor: 100,
-                thirst: 90,
                 isDisplayCreate: false,
                 isDisplayDragon: true
             })
+            this.state.appetite = 80
+            this.state.health = 100
+            this.state.humor = 100
+            this.state.thirst = 90
             this.say = 'Hello, my name is '
                 + name
             this.src = require('../images/1.gif')
@@ -67,7 +67,7 @@ export default class Tamagotchi extends Component {
     life() {
         this.text = ''
         var sumIgnore = this.state.ignoreEat + this.state.ignoreDrink + this.state.ignorePlay + this.state.ignoreSleep
-        if (this.state.value) {
+        if (/[1-9a-zа-я\-]+/gi.test(this.state.value)) {
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -115,47 +115,48 @@ export default class Tamagotchi extends Component {
                 this.state.thirst -= getRandomInt()
             }
             if (this.state.humor < 100) {
-                this.text += 'I want to play'
+                this.text += 'I want to play\n'
                 this.state.ignorePlay++
             }
             if (this.state.ignorePlay > 5) {
                 this.state.health -= getRandomInt()
                 this.state.humor -= getRandomInt()
             }
-            if (this.state.appetite <= 0) {
+            if (this.state.appetite < 0) {
                 this.state.ignoreEat++
                 this.state.appetite = 0
-                this.text = 'I really want to eat!\n'
+                this.text += 'I really want to eat!\n'
             }
-            if (this.state.humor <= 0) {
+            if (this.state.humor < 0) {
                 this.state.humor = 0
                 this.state.ignorePlay++
             }
-            if (this.state.humor >= 100) {
+            if (this.state.humor > 100) {
                 this.state.humor = 100
             }
-            if (this.state.thirst <= 0) {
+            if (this.state.thirst < 0) {
                 this.state.thirst = 0
-                this.text = 'I really want to drink!'
+                this.text += 'I really want to drink!'
                 this.state.ignoreDrink++
             }
-            if (this.state.health <= 0) {
+            if (this.state.health < 0) {
                 this.state.health = 0
                 this.state.ignoreSleep++
             }
-            if (this.state.health >= 100) {
+            if (this.state.health > 100) {
                 this.state.health = 100
             }
-            if (this.state.appetite >= 100) {
+            if (this.state.appetite > 100) {
                 this.state.appetite = 100
             }
-            if (this.state.thirst >= 100) {
+            if (this.state.thirst > 100) {
                 this.state.thirst = 100
             }
             //die
             if (this.state.humor <= 0 && this.state.health <= 0 && sumIgnore > 0) {
                 this.say = 'I am die'
                 this.text = ''
+                this.src = require('../images/die.gif')
                 setTimeout(function () {
                     window.location.reload()
                 }, 5000)
