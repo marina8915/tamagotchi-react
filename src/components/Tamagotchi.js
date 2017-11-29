@@ -41,7 +41,7 @@ export default class Tamagotchi extends Component {
     createDragon(event) {
         event.preventDefault()
         var name = this.state.value
-        if (/[1-9a-zа-я\-]+/gi.test(name)) {
+        if (name.replace(/ /g, '')) {
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -67,7 +67,7 @@ export default class Tamagotchi extends Component {
     life() {
         this.text = ''
         var sumIgnore = this.state.ignoreEat + this.state.ignoreDrink + this.state.ignorePlay + this.state.ignoreSleep
-        if (/[1-9a-zа-я\-]+/gi.test(this.state.value)) {
+        if (this.state.value.replace(/ /g, '')) {
             this.setState({
                 parameters: this.state.parameters.concat([{
                     appetite: this.state.appetite,
@@ -160,7 +160,6 @@ export default class Tamagotchi extends Component {
                 setTimeout(function () {
                     window.location.reload()
                 }, 5000)
-
             }
         } else {
             this.text = 'Hello, create a new dragon!\n Please enter a name.'
