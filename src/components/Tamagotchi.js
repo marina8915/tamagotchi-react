@@ -92,7 +92,7 @@ export default class Tamagotchi extends Component {
                 this.text = 'I want to sleep\n'
                 this.state.ignoreSleep++
             }
-            if (this.state.ignoreSleep > 5) {
+            if (this.state.ignoreSleep > 30) {
                 this.state.health -= getRandomInt()
                 this.state.humor -= getRandomInt()
             }
@@ -100,7 +100,7 @@ export default class Tamagotchi extends Component {
                 this.text += 'Please, give me the feed\n'
                 this.state.ignoreEat++
             }
-            if (this.state.ignoreEat > 5) {
+            if (this.state.ignoreEat > 30) {
                 this.state.health -= getRandomInt()
                 this.state.humor -= getRandomInt()
                 this.state.appetite -= getRandomInt()
@@ -109,7 +109,7 @@ export default class Tamagotchi extends Component {
                 this.text += 'Please, give me the water\n'
                 this.state.ignoreDrink++
             }
-            if (this.state.ignoreDrink > 5) {
+            if (this.state.ignoreDrink > 30) {
                 this.state.health -= getRandomInt()
                 this.state.humor -= getRandomInt()
                 this.state.thirst -= getRandomInt()
@@ -118,7 +118,7 @@ export default class Tamagotchi extends Component {
                 this.text += 'I want to play\n'
                 this.state.ignorePlay++
             }
-            if (this.state.ignorePlay > 5) {
+            if (this.state.ignorePlay > 30) {
                 this.state.health -= getRandomInt()
                 this.state.humor -= getRandomInt()
             }
@@ -153,7 +153,11 @@ export default class Tamagotchi extends Component {
                 this.state.thirst = 100
             }
             //die
-            if (this.state.humor <= 0 && this.state.health <= 0 && sumIgnore > 0) {
+            if ((this.state.humor <= 0
+                    || this.state.health <= 0
+                    || this.state.appetite <= 0
+                    || this.state.thirst <= 0)
+                && sumIgnore > 0) {
                 this.say = 'I am die'
                 this.text = ''
                 this.src = require('../images/die.gif')
